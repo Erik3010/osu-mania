@@ -41,7 +41,7 @@ class Game {
 
     this.score = 0;
 
-    this.speed = 1;
+    this.speed = 0.5;
   }
   async init() {
     this.song = await Utility.fetchSongMap();
@@ -68,8 +68,8 @@ class Game {
       const tile = new Tile({
         ctx: this.ctx,
         x: (object.position - 1) * width,
-        y: -(object.hitAt - offsetHeight) * this.speed,
-        hitAt: -(object.hitAt - offsetHeight) * this.speed,
+        y: -object.hitAt * this.speed - -offsetHeight,
+        hitAt: -object.hitAt * this.speed - -offsetHeight,
         speed: this.speed,
         width: this.canvas.width / this.laneCount,
         height: 30,
