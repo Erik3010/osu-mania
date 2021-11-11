@@ -2,13 +2,26 @@ import Rect from "./Engine/Rect";
 import Text from "./Engine/Text";
 
 class PianoKey extends Rect {
-  constructor({ ctx, x, y, width, height, color, hoverColor, isHover, key }) {
+  constructor({
+    ctx,
+    x,
+    y,
+    width,
+    height,
+    color,
+    hoverColor,
+    isHover,
+    key,
+    onHitTile = () => {},
+  }) {
     super({ ctx, x, y, width, height, color, hoverColor, isHover });
 
     this.key = key;
 
     this.highlight = null;
     this.text == null;
+
+    this.onHitTile = onHitTile;
 
     this.initText();
     this.initHighlight();
@@ -56,10 +69,19 @@ class PianoKey extends Rect {
     window.addEventListener("keyup", this.keyUpHandler.bind(this));
   }
   keyDownHandler(e) {
-    if (e.code === `Key${this.key}`) this.isHover = true;
+    if (!this.isValidKey(e.code)) return;
+
+    this.isHover = true;
+
+    this.onHitTile(this.key);
   }
   keyUpHandler(e) {
-    if (e.code === `Key${this.key}`) this.isHover = false;
+    if (!this.isValidKey(e.code)) return;
+
+    this.isHover = false;
+  }
+  isValidKey(code) {
+    return code === `Key${this.key}`;
   }
 }
 

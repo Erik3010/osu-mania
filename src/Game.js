@@ -8,7 +8,7 @@ import Utility from "./Utility";
 class Game {
   constructor({ canvas, timeEl, scoreEl }) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext("2d");
+    this.ctx = this.canvas.getContext("2d");
 
     this.timeEl = timeEl;
     this.scoreEl = scoreEl;
@@ -34,6 +34,11 @@ class Game {
       height: 15,
     };
 
+    this.offsetHeight =
+      this.canvas.height -
+      this.pianoKeysPosition.height -
+      this.borderPosition.height;
+
     this.keysMap = ["D", "F", "J", "K"];
 
     this.ms = 0;
@@ -41,7 +46,7 @@ class Game {
 
     this.score = 0;
 
-    this.speed = 0.5;
+    this.speed = 1;
   }
   async init() {
     this.song = await Utility.fetchSongMap();
@@ -58,27 +63,23 @@ class Game {
   }
   initTiles() {
     this.song.hitObjects.forEach((object) => {
-      const offsetHeight =
-        this.canvas.height -
-        this.pianoKeysPosition.height -
-        this.borderPosition.height;
-
       const width = this.canvas.width / this.laneCount;
+
+      const initialY = -object.hitAt * this.speed + this.offsetHeight;
 
       const tile = new Tile({
         ctx: this.ctx,
         x: (object.position - 1) * width,
-        y: -object.hitAt * this.speed - -offsetHeight,
-        hitAt: -object.hitAt * this.speed - -offsetHeight,
+        y: initialY,
+        hitAt: initialY,
+        position: object.position - 1,
         speed: this.speed,
         width: this.canvas.width / this.laneCount,
         height: 30,
         color: "#ffb930",
       });
-
       this.tiles.push(tile);
     });
-
     console.log(this.tiles);
   }
   initLine() {
@@ -130,12 +131,17 @@ class Game {
           width: width - 4,
           color: "#ffb930",
           hoverColor: "#d69b27",
+          onHitTile: this.hitTileHandler.bind(this),
         })
       );
     });
   }
   draw() {
-    this.tiles.forEach((tile) => tile.update(this.ms));
+    this.tiles.forEach((tile) => {
+      if (!tile.passed && !tile.hitted) {
+        tile.update(this.ms);
+      }
+    });
 
     this.keys.forEach((key) => key.draw());
     this.lines.forEach((line) => line.draw());
@@ -143,16 +149,45 @@ class Game {
     this.border.draw();
 
     this.timeEl.innerHTML = (this.ms / 1000).toFixed(2);
-    this.scoreEl.innerHTML = `${this.score}%`;
+    this.scoreEl.innerHTML = `${this.score.toFixed(2)}%`;
+  }
+  hitTileHandler(key) {
+    this.tiles.forEach((tile) => {
+      if (this.isTileHitted(tile, key)) tile.hitted = true;
+    });
+  }
+  vanishTiles() {
+    this.tiles.forEach((tile) => {
+      if (tile.y >= this.offsetHeight + 30) tile.passed = true;
+    });
   }
   animate() {
     this.ms = Date.now() - this.start;
 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
     this.draw();
 
+    this.vanishTiles();
+
+    this.calculateScore();
+
     setTimeout(this.animate.bind(this), this.interval);
+  }
+  isTileHitted(tile, key) {
+    return (
+      tile.y >= this.offsetHeight &&
+      !tile.hitted &&
+      !tile.passed &&
+      tile.position === this.keysMap.indexOf(key)
+    );
+  }
+  calculateScore() {
+    const hitted = this.tiles.filter((tile) => tile.hitted).length;
+    const passed = this.tiles.filter((tile) => tile.passed).length;
+
+    console.log(hitted, passed);
+
+    this.score = !passed ? 0 : (hitted / passed) * 100;
   }
 }
 
