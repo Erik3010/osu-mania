@@ -46,7 +46,7 @@ class Game {
 
     this.score = 0;
 
-    this.speed = 1;
+    this.speed = 0.6;
   }
   async init() {
     this.song = await Utility.fetchSongMap();
@@ -153,12 +153,15 @@ class Game {
   }
   hitTileHandler(key) {
     this.tiles.forEach((tile) => {
-      if (this.isTileHitted(tile, key)) tile.hitted = true;
+      if (this.isTileHitted(tile, key)) {
+        tile.hitted = true;
+        tile.passed = true;
+      }
     });
   }
   vanishTiles() {
     this.tiles.forEach((tile) => {
-      if (tile.y >= this.offsetHeight + 30) tile.passed = true;
+      if (tile.y > this.offsetHeight + 100 && !tile.passed) tile.passed = true;
     });
   }
   animate() {
@@ -175,7 +178,8 @@ class Game {
   }
   isTileHitted(tile, key) {
     return (
-      tile.y >= this.offsetHeight &&
+      tile.y + 100 >= this.offsetHeight &&
+      tile.y <= this.offsetHeight + 100 &&
       !tile.hitted &&
       !tile.passed &&
       tile.position === this.keysMap.indexOf(key)
