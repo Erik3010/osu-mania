@@ -7,4 +7,4 @@ const timeEl = document.querySelector(".time-container span");
 const scoreEl = document.querySelector(".score-container span");
 
 const game = new Game({ canvas, timeEl, scoreEl });
-window.onload = async () => await game.init();
+// window.onload = async () => await game.init();
