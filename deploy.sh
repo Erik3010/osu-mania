@@ -11,7 +11,7 @@ cd dist
 
 git init
 git add -A
-git commit -m 'deploy'
+git commit -m 'deploy' || true
 
 git push -f git@github.com:Erik3010/osu-mania.git master:gh-pages
 
