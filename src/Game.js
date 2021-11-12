@@ -20,7 +20,8 @@ class Game {
     this.lines = [];
     this.border = null;
 
-    this.interval = 30;
+    this.interval = null;
+    this.fps = 1000 / 30;
 
     this.laneCount = 4;
 
@@ -46,7 +47,9 @@ class Game {
 
     this.score = 0;
 
-    this.speed = 0.6;
+    this.speed = 1;
+
+    this.tolerance = 50;
   }
   async init() {
     this.song = await Utility.fetchSongMap();
@@ -137,11 +140,9 @@ class Game {
     });
   }
   draw() {
-    this.tiles.forEach((tile) => {
-      if (!tile.passed && !tile.hitted) {
-        tile.update(this.ms);
-      }
-    });
+    this.tiles.forEach(
+      (tile) => !tile.passed && !tile.hitted && tile.update(this.ms)
+    );
 
     this.keys.forEach((key) => key.draw());
     this.lines.forEach((line) => line.draw());
@@ -161,10 +162,20 @@ class Game {
   }
   vanishTiles() {
     this.tiles.forEach((tile) => {
-      if (tile.y > this.offsetHeight + 100 && !tile.passed) tile.passed = true;
+      if (
+        tile.y > this.offsetHeight + this.tolerance &&
+        !tile.hitted &&
+        !tile.passed
+      )
+        tile.passed = true;
     });
   }
   animate() {
+    if (this.isFinish) {
+      alert(`Your score: ${this.score.toFixed(2)}%`);
+      return;
+    }
+
     this.ms = Date.now() - this.start;
 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -174,12 +185,12 @@ class Game {
 
     this.calculateScore();
 
-    setTimeout(this.animate.bind(this), this.interval);
+    this.interval = setTimeout(this.animate.bind(this), this.fps);
   }
   isTileHitted(tile, key) {
     return (
-      tile.y + 100 >= this.offsetHeight &&
-      tile.y <= this.offsetHeight + 100 &&
+      tile.y + this.tolerance >= this.offsetHeight &&
+      tile.y <= this.offsetHeight + this.tolerance &&
       !tile.hitted &&
       !tile.passed &&
       tile.position === this.keysMap.indexOf(key)
@@ -189,9 +200,13 @@ class Game {
     const hitted = this.tiles.filter((tile) => tile.hitted).length;
     const passed = this.tiles.filter((tile) => tile.passed).length;
 
-    console.log(hitted, passed);
-
     this.score = !passed ? 0 : (hitted / passed) * 100;
+  }
+  get isFinish() {
+    return (
+      this.ms >=
+      this.song.hitObjects[this.song.hitObjects.length - 1].hitAt + 1000
+    );
   }
 }
 
