@@ -51,7 +51,14 @@ class Game {
 
     this.tolerance = 50;
   }
-  async init() {
+  async init(speed) {
+    const speedModes = {
+      slow: 0.5,
+      normal: 1,
+      hardcore: 2,
+    };
+    this.speed = speedModes[speed];
+
     this.start = Date.now();
 
     this.song = await Utility.fetchSongMap();
