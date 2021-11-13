@@ -1,11 +1,13 @@
 class Modal {
-  constructor({ modal, activator, initialValue }) {
+  constructor({ modal, closeButton, initialValue, onCloseButtonClicked }) {
     this.modal = modal;
-    this.activator = activator;
+    this.closeButton = closeButton;
 
     this.modalContent = this.modal.querySelector(".modal");
 
     this.isShowModal = initialValue;
+
+    this.onCloseButtonClicked = onCloseButtonClicked;
   }
   init() {
     if (this.isShowModal) this.openModal();
@@ -14,38 +16,29 @@ class Modal {
     this.listener();
   }
   listener() {
-    this.activator.addEventListener("click", () => {
-      const isModalShow = this.modal.classList.contains("show");
-      // const isModalShow = this.modalContent.classList.contains("show-modal");
-
-      if (isModalShow) this.closeModal();
+    this.closeButton.addEventListener("click", () => {
+      if (this.isShowModal) this.closeModal();
       else this.openModal();
     });
 
     this.modalContent.addEventListener("animationend", () => {
-      const display = this.isShowModal ? "block" : "none";
+      this.modalContent.style.display = this.isShowModal ? "block" : "none";
+      this.modal.style.display = this.isShowModal ? "flex" : "none";
 
-      this.modalContent.style.display = display;
-      this.modal.style.display = display;
+      if (!this.isShowModal) this.onCloseButtonClicked();
     });
   }
   closeModal() {
+    this.isShowModal = false;
+
     this.modalContent.classList.add("hide-modal");
     this.modalContent.classList.remove("show-modal");
-
-    this.modal.classList.remove("show");
-    this.modal.classList.add("hide");
-
-    this.isShowModal = false;
   }
   openModal() {
+    this.isShowModal = true;
+
     this.modalContent.classList.remove("hide-modal");
     this.modalContent.classList.add("show-modal");
-
-    this.modal.classList.add("show");
-    this.modal.classList.remove("hide");
-
-    this.isShowModal = true;
   }
 }
 

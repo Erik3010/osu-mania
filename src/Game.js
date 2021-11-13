@@ -43,7 +43,7 @@ class Game {
     this.keysMap = ["D", "F", "J", "K"];
 
     this.ms = 0;
-    this.start = Date.now();
+    this.start = 0;
 
     this.score = 0;
 
@@ -52,6 +52,8 @@ class Game {
     this.tolerance = 50;
   }
   async init() {
+    this.start = Date.now();
+
     this.song = await Utility.fetchSongMap();
 
     this.initUI();

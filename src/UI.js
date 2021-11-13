@@ -3,16 +3,18 @@ import Modal from "./Components/Modal";
 class UI {
   constructor({ game }) {
     this.game = game;
+
+    this.modal = null;
   }
   async init() {
-    // await this.game.init();
-
-    const modal = new Modal({
+    this.modal = new Modal({
       modal: document.querySelector("#start-modal"),
-      activator: document.querySelector("#start-btn"),
+      closeButton: document.querySelector("#start-btn"),
       initialValue: true,
+      onCloseButtonClicked: this.game.init.bind(this.game),
     });
-    modal.init();
+
+    this.modal.init();
   }
 }
 
