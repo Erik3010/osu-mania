@@ -1,4 +1,4 @@
-import Modal from "./Components/Modal";
+import Modal from "./components/Modal";
 
 class UI {
   constructor({ game }) {
