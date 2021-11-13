@@ -37,6 +37,8 @@ class Modal {
   openModal() {
     this.isShowModal = true;
 
+    this.modal.style.display = "flex";
+
     this.modalContent.classList.remove("hide-modal");
     this.modalContent.classList.add("show-modal");
   }
