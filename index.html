@@ -6,8 +6,8 @@
   <link rel="icon" type="image/svg+xml" href="/osu-mania/assets/favicon.17e50649.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite App</title>
-  <script type="module" crossorigin src="/osu-mania/assets/index.949dcb7c.js"></script>
-  <link rel="stylesheet" href="/osu-mania/assets/index.3d6989c3.css">
+  <script type="module" crossorigin src="/osu-mania/assets/index.13929218.js"></script>
+  <link rel="stylesheet" href="/osu-mania/assets/index.e7ba3875.css">
 </head>
 
 <body>
@@ -22,6 +22,42 @@
     </div>
     <div class="container">
       <canvas id="canvas" width="400" height="600"></canvas>
+    </div>
+  </div>
+
+  <div class="modal-container" id="start-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="text-primary">osu!</span> mania
+      </div>
+      <div class="modal-body">
+        <div class="modal-item">
+          <p>Choose speed mode</p>
+          <div class="speed-mode-container">
+            <div class="speed-mode">
+              <input type="radio" name="speed" id="slow" checked value="slow">
+              <label for="slow" class="speed-mode-item">
+                <span>Slow</span>
+              </label>
+            </div>
+            <div class="speed-mode">
+              <input type="radio" name="speed" id="normal" value="normal">
+              <label for="normal" class="speed-mode-item">
+                <span>Normal</span>
+              </label>
+            </div>
+            <div class="speed-mode">
+              <input type="radio" name="speed" id="hardcore" value="hardcore">
+              <label for="hardcore" class="speed-mode-item">
+                <span>Hardcore</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="btn btn-primary" id="start-btn">Start Game!</div>
+      </div>
     </div>
   </div>
   
