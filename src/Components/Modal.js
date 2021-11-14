@@ -1,13 +1,11 @@
 class Modal {
-  constructor({ modal, closeButton, initialValue, onCloseButtonClicked }) {
+  constructor({ modal, initialValue }) {
     this.modal = modal;
-    this.closeButton = closeButton;
-
     this.modalContent = this.modal.querySelector(".modal");
 
     this.isShowModal = initialValue;
 
-    this.onCloseButtonClicked = onCloseButtonClicked;
+    this.resolveCallback = null;
   }
   init() {
     if (this.isShowModal) this.openModal();
@@ -16,31 +14,38 @@ class Modal {
     this.listener();
   }
   listener() {
-    this.closeButton.addEventListener("click", () => {
-      if (this.isShowModal) this.closeModal();
-      else this.openModal();
-    });
-
     this.modalContent.addEventListener("animationend", () => {
-      this.modalContent.style.display = this.isShowModal ? "block" : "none";
+      console.log(this.isShowModal);
+
       this.modal.style.display = this.isShowModal ? "flex" : "none";
 
-      if (!this.isShowModal) this.onCloseButtonClicked();
+      if (this.resolveCallback) {
+        this.resolveCallback();
+        this.resolveCallback = null;
+      }
     });
   }
   closeModal() {
-    this.isShowModal = false;
+    return new Promise((resolve) => {
+      this.isShowModal = false;
 
-    this.modalContent.classList.add("hide-modal");
-    this.modalContent.classList.remove("show-modal");
+      this.modalContent.classList.add("hide-modal");
+      this.modalContent.classList.remove("show-modal");
+
+      this.resolveCallback = resolve;
+    });
   }
   openModal() {
-    this.isShowModal = true;
+    return new Promise((resolve) => {
+      this.isShowModal = true;
 
-    this.modal.style.display = "flex";
+      this.modal.style.display = "flex";
 
-    this.modalContent.classList.remove("hide-modal");
-    this.modalContent.classList.add("show-modal");
+      this.modalContent.classList.remove("hide-modal");
+      this.modalContent.classList.add("show-modal");
+
+      this.resolveCallback = resolve;
+    });
   }
 }
 

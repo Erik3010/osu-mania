@@ -1,41 +1,73 @@
-import Modal from "./components/Modal";
+import Modal from "./Components/Modal";
 
 class UI {
-  constructor({ game }) {
+  constructor({ game, startGameButton, resumeGameButton, speedLevelRadios }) {
     this.game = game;
 
-    this.modal = null;
+    this.startModal = null;
+    this.pauseModal = null;
 
-    this.speedLeveEls = [
-      ...document.querySelectorAll(".speed-mode input[type=radio]"),
-    ];
-    this.selectedLevel = this.speedLeveEls.find((el) => el.checked)?.value;
+    this.speedLevelRadios = speedLevelRadios;
+    this.selectedLevel = this.speedLevelRadios.find((el) => el.checked)?.value;
+
+    this.startGameButton = startGameButton;
+    this.resumeGameButton = resumeGameButton;
   }
   async init() {
-    this.initModal();
+    this.initStartModal();
+    this.initPauseModal();
 
-    this.speedLeveEls.forEach((el) => {
-      el.addEventListener("change", this.speedModeChangeHandler.bind(this));
-    });
+    this.listener();
   }
-  initModal() {
-    this.modal = new Modal({
+  listener() {
+    this.speedLevelRadios.forEach((el) =>
+      el.addEventListener("change", this.speedModeChangeHandler.bind(this))
+    );
+
+    window.addEventListener("keydown", this.pauseGameHandler.bind(this));
+
+    this.startGameButton.addEventListener(
+      "click",
+      this.startGameHandler.bind(this)
+    );
+
+    this.resumeGameButton.addEventListener(
+      "click",
+      this.resumeGameHandler.bind(this)
+    );
+  }
+  initStartModal() {
+    this.startModal = new Modal({
       modal: document.querySelector("#start-modal"),
-      closeButton: document.querySelector("#start-btn"),
       initialValue: true,
-      onCloseButtonClicked: this.game.init.bind(this.game, this.selectedLevel),
     });
 
-    this.modal.init();
+    this.startModal.init();
+  }
+  initPauseModal() {
+    this.pauseModal = new Modal({
+      modal: document.querySelector("#pause-modal"),
+      initialValue: false,
+    });
+    this.pauseModal.init();
   }
   speedModeChangeHandler(e) {
     if (!e.target.checked) return;
 
     this.selectedLevel = e.target.value;
-    this.modal.onCloseButtonClicked = this.game.init.bind(
-      this.game,
-      this.selectedLevel
-    );
+  }
+  async startGameHandler() {
+    await this.startModal.closeModal();
+
+    this.game.init(this.selectedLevel);
+  }
+  async pauseGameHandler(e) {
+    if (e.code !== "Escape" || this.game.ms === 0) return;
+
+    await this.pauseModal.openModal();
+  }
+  async resumeGameHandler() {
+    await this.pauseModal.closeModal();
   }
 }
 

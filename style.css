@@ -50,16 +50,16 @@
 .btn {
   outline: none;
   cursor: pointer;
-  padding: .75rem .5rem;
-  border-radius: .35rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.35rem;
   text-align: center;
-  font-size: .9rem;
-  transition: .3s ease;
+  font-size: 0.9rem;
+  transition: 0.3s ease;
   transition-property: transform, background-color;
 }
 
 .btn:active {
-  transform: scale(.95);
+  transform: scale(0.95);
 }
 
 .btn-primary {
@@ -78,11 +78,12 @@
   right: 0;
   bottom: 0;
   display: none;
+  /* display: flex; */
   align-items: center;
   justify-content: center;
   background: rgba(25, 25, 25, 0.1);
-  backdrop-filter: blur(.5rem);
-  transition: backdrop-filter .3s;
+  backdrop-filter: blur(0.5rem);
+  transition: backdrop-filter 0.3s;
 }
 
 .modal {
@@ -104,9 +105,15 @@
   font-weight: 700;
 }
 
-.modal-item p {
+.modal-item-label {
   color: #c2c2c2;
   font-size: 0.85rem;
+}
+
+.modal-item-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin-top: 0.35rem;
 }
 
 .speed-mode-container {
@@ -115,7 +122,7 @@
 }
 
 .speed-mode-container > * + * {
-  margin-left: .65rem;
+  margin-left: 0.65rem;
 }
 
 .speed-mode-item {
@@ -146,16 +153,16 @@ input[type="radio"]:checked + .speed-mode-item {
   margin-top: 1.7rem;
 }
 
-.modal-footer{
+.modal-footer {
   margin-top: 2.65rem;
 }
 
 .show-modal {
-  animation: scale-in .5s ease;
+  animation: scale-in 0.5s ease;
 }
 
 .hide-modal {
-  animation: scale-out .5s ease;
+  animation: scale-out 0.5s ease;
 }
 
 @keyframes scale-in {

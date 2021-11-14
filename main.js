@@ -7,11 +7,14 @@ const canvas = document.querySelector("#canvas");
 const timeEl = document.querySelector(".time-container span");
 const scoreEl = document.querySelector(".score-container span");
 
-const startBtn = document.querySelector("#start-btn");
-const startModal = document.querySelector("#start-modal");
-
 const game = new Game({ canvas, timeEl, scoreEl });
-// window.onload = async () => await game.init();
 
-const ui = new UI({ game });
+const ui = new UI({
+  game,
+  startGameButton: document.querySelector("#start-btn"),
+  resumeGameButton: document.querySelector("#resume-btn"),
+  speedLevelRadios: [
+    ...document.querySelectorAll(".speed-mode input[type=radio]"),
+  ],
+});
 window.onload = async () => await ui.init();
