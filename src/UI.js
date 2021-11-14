@@ -64,10 +64,14 @@ class UI {
   async pauseGameHandler(e) {
     if (e.code !== "Escape" || this.game.ms === 0) return;
 
+    this.game.pauseGame();
+
     await this.pauseModal.openModal();
   }
   async resumeGameHandler() {
     await this.pauseModal.closeModal();
+
+    this.game.resumeGame();
   }
 }
 

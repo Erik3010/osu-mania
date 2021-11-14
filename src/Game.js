@@ -57,6 +57,7 @@ class Game {
     this.hitTolerance = 50;
 
     this.pause = false;
+    this.pauseStart = null;
   }
   async init(speed) {
     this.speed = this.speedModes[speed];
@@ -191,8 +192,8 @@ class Game {
     });
   }
   animate() {
-    if (this.isFinish) {
-      alert(`Your score: ${this.score}%`);
+    if (this.isFinish || this.pause) {
+      this.isFinish && alert(`Your score: ${this.score}%`);
       return;
     }
 
@@ -213,6 +214,18 @@ class Game {
       !tile.passed &&
       tile.position === this.keysMap.indexOf(key)
     );
+  }
+  pauseGame() {
+    this.pause = true;
+    this.pauseStart = Date.now();
+  }
+  resumeGame() {
+    this.pause = false;
+
+    const pausedTime = Date.now() - this.pauseStart;
+    this.start += pausedTime;
+
+    this.interval = setTimeout(this.animate.bind(this), this.fps);
   }
   get score() {
     const hitted = this.tiles.filter((tile) => tile.hitted).length;

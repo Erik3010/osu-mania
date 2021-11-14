@@ -15,8 +15,6 @@ class Modal {
   }
   listener() {
     this.modalContent.addEventListener("animationend", () => {
-      console.log(this.isShowModal);
-
       this.modal.style.display = this.isShowModal ? "flex" : "none";
 
       if (this.resolveCallback) {
