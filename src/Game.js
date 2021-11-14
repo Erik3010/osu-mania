@@ -47,8 +47,6 @@ class Game {
     this.ms = 0;
     this.start = 0;
 
-    this.score = 0;
-
     this.speedModes = {
       slow: 0.5,
       normal: 1,
@@ -57,6 +55,8 @@ class Game {
     this.speed = this.speedModes["normal"];
 
     this.hitTolerance = 50;
+
+    this.pause = false;
   }
   async init(speed) {
     this.speed = this.speedModes[speed];
@@ -170,7 +170,7 @@ class Game {
     this.border.draw();
 
     this.timeEl.innerHTML = (this.ms / 1000).toFixed(2);
-    this.scoreEl.innerHTML = `${this.score.toFixed(2)}%`;
+    this.scoreEl.innerHTML = `${this.score}%`;
   }
   hitTileHandler(key) {
     this.tiles.forEach((tile) => {
@@ -192,7 +192,7 @@ class Game {
   }
   animate() {
     if (this.isFinish) {
-      alert(`Your score: ${this.score.toFixed(2)}%`);
+      alert(`Your score: ${this.score}%`);
       return;
     }
 
@@ -202,8 +202,6 @@ class Game {
     this.draw();
 
     this.vanishTiles();
-
-    this.calculateScore();
 
     this.interval = setTimeout(this.animate.bind(this), this.fps);
   }
@@ -216,11 +214,11 @@ class Game {
       tile.position === this.keysMap.indexOf(key)
     );
   }
-  calculateScore() {
+  get score() {
     const hitted = this.tiles.filter((tile) => tile.hitted).length;
     const passed = this.tiles.filter((tile) => tile.passed).length;
 
-    this.score = !passed ? 0 : (hitted / passed) * 100;
+    return (!passed ? 0 : (hitted / passed) * 100).toFixed(2);
   }
   get isFinish() {
     return (
