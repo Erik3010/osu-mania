@@ -198,7 +198,7 @@ class Game {
   }
   isTileHitted(tile, key) {
     return (
-      tile.y + this.tolerance >= this.offsetHeight &&
+      tile.y + tile.height >= this.offsetHeight - this.tolerance &&
       tile.y <= this.offsetHeight + this.tolerance &&
       !tile.hitted &&
       !tile.passed &&
