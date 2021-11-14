@@ -6,8 +6,8 @@
   <link rel="icon" type="image/svg+xml" href="/osu-mania/assets/favicon.17e50649.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite App</title>
-  <script type="module" crossorigin src="/osu-mania/assets/index.13929218.js"></script>
-  <link rel="stylesheet" href="/osu-mania/assets/index.e7ba3875.css">
+  <script type="module" crossorigin src="/osu-mania/assets/index.3a36fd71.js"></script>
+  <link rel="stylesheet" href="/osu-mania/assets/index.81e92364.css">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
       </div>
       <div class="modal-body">
         <div class="modal-item">
-          <p>Choose speed mode</p>
+          <p class="modal-item-label">Choose speed mode</p>
           <div class="speed-mode-container">
             <div class="speed-mode">
               <input type="radio" name="speed" id="slow" checked value="slow">
@@ -57,6 +57,27 @@
       </div>
       <div class="modal-footer">
         <div class="btn btn-primary" id="start-btn">Start Game!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-container" id="pause-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="text-primary">osu!</span> mania
+      </div>
+      <div class="modal-body">
+        <div class="modal-item">
+          <p class="modal-item-label">Time</p>
+          <p class="modal-item-value">20.39</p>
+        </div>
+        <div class="modal-item">
+          <p class="modal-item-label">Current Score</p>
+          <p class="modal-item-value">50.00%</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="btn btn-primary" id="resume-btn">Resume Game!</div>
       </div>
     </div>
   </div>
