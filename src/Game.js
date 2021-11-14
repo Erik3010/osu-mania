@@ -47,17 +47,17 @@ class Game {
 
     this.score = 0;
 
+    this.speedModes = {
+      slow: 0.5,
+      normal: 1,
+      hardcore: 2,
+    };
     this.speed = 1;
 
     this.tolerance = 50;
   }
   async init(speed) {
-    const speedModes = {
-      slow: 0.5,
-      normal: 1,
-      hardcore: 2,
-    };
-    this.speed = speedModes[speed];
+    this.speed = this.speedModes[speed];
 
     this.start = Date.now();
 
@@ -92,7 +92,6 @@ class Game {
       });
       this.tiles.push(tile);
     });
-    console.log(this.tiles);
   }
   initLine() {
     Array(this.laneCount + 1)
