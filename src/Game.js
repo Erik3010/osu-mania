@@ -3,6 +3,8 @@ import PianoKey from "./PianoKey";
 import Border from "./Border";
 import Tile from "./Tile";
 
+import Rect from "./Engine/Rect";
+
 import Utility from "./Utility";
 
 class Game {
@@ -52,9 +54,9 @@ class Game {
       normal: 1,
       hardcore: 2,
     };
-    this.speed = 1;
+    this.speed = this.speedModes["normal"];
 
-    this.tolerance = 50;
+    this.hitTolerance = 50;
   }
   async init(speed) {
     this.speed = this.speedModes[speed];
@@ -74,9 +76,9 @@ class Game {
     this.initBorder();
   }
   initTiles() {
-    this.song.hitObjects.forEach((object) => {
-      const width = this.canvas.width / this.laneCount;
+    const width = this.canvas.width / this.laneCount;
 
+    this.song.hitObjects.forEach((object) => {
       const initialY = -object.hitAt * this.speed + this.offsetHeight;
 
       const tile = new Tile({
@@ -94,11 +96,11 @@ class Game {
     });
   }
   initLine() {
+    const { width, height } = this.pianoKeysPosition;
+
     Array(this.laneCount + 1)
       .fill("")
       .forEach((_, index) => {
-        const { width, height } = this.pianoKeysPosition;
-
         this.lines.push(
           new Line({
             ctx: this.ctx,
@@ -129,9 +131,18 @@ class Game {
     });
   }
   initPianoKeys() {
-    this.keysMap.forEach((key, index) => {
-      const { width, height } = this.pianoKeysPosition;
+    const { width, height } = this.pianoKeysPosition;
 
+    this.keysArea = new Rect({
+      ctx: this.ctx,
+      x: 0,
+      y: this.canvas.height - height - this.borderPosition.height,
+      width: this.canvas.width,
+      height: this.canvas.height,
+      color: "#0f0f17",
+    });
+
+    this.keysMap.forEach((key, index) => {
       this.keys.push(
         new PianoKey({
           height,
@@ -152,6 +163,7 @@ class Game {
       (tile) => !tile.passed && !tile.hitted && tile.update(this.ms)
     );
 
+    this.keysArea.draw();
     this.keys.forEach((key) => key.draw());
     this.lines.forEach((line) => line.draw());
 
@@ -171,7 +183,7 @@ class Game {
   vanishTiles() {
     this.tiles.forEach((tile) => {
       if (
-        tile.y > this.offsetHeight + this.tolerance &&
+        tile.y > this.offsetHeight + this.hitTolerance &&
         !tile.hitted &&
         !tile.passed
       )
@@ -197,8 +209,8 @@ class Game {
   }
   isTileHitted(tile, key) {
     return (
-      tile.y + tile.height >= this.offsetHeight - this.tolerance &&
-      tile.y <= this.offsetHeight + this.tolerance &&
+      tile.y + tile.height >= this.offsetHeight - this.hitTolerance &&
+      tile.y <= this.offsetHeight + this.hitTolerance &&
       !tile.hitted &&
       !tile.passed &&
       tile.position === this.keysMap.indexOf(key)

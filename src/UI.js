@@ -15,15 +15,7 @@ class UI {
     this.initModal();
 
     this.speedLeveEls.forEach((el) => {
-      el.addEventListener("change", (e) => {
-        if (e.target.checked) {
-          this.selectedLevel = e.target.value;
-          this.modal.onCloseButtonClicked = this.game.init.bind(
-            this.game,
-            this.selectedLevel
-          );
-        }
-      });
+      el.addEventListener("change", this.speedModeChangeHandler.bind(this));
     });
   }
   initModal() {
@@ -35,6 +27,15 @@ class UI {
     });
 
     this.modal.init();
+  }
+  speedModeChangeHandler(e) {
+    if (!e.target.checked) return;
+
+    this.selectedLevel = e.target.value;
+    this.modal.onCloseButtonClicked = this.game.init.bind(
+      this.game,
+      this.selectedLevel
+    );
   }
 }
 
