@@ -1,7 +1,13 @@
 import Modal from "./Components/Modal";
 
 class UI {
-  constructor({ game, startGameButton, resumeGameButton, speedLevelRadios }) {
+  constructor({
+    game,
+    startGameButton,
+    resumeGameButton,
+    speedLevelRadios,
+    pauseModalEl,
+  }) {
     this.game = game;
 
     this.startModal = null;
@@ -12,6 +18,8 @@ class UI {
 
     this.startGameButton = startGameButton;
     this.resumeGameButton = resumeGameButton;
+
+    this.pauseModalEl = pauseModalEl;
   }
   async init() {
     this.initStartModal();
@@ -57,7 +65,7 @@ class UI {
     this.selectedLevel = e.target.value;
   }
   async startGameHandler() {
-    await this.startModal.closeModal();
+    await this.startModal.close();
 
     this.game.init(this.selectedLevel);
   }
@@ -66,10 +74,13 @@ class UI {
 
     this.game.pauseGame();
 
-    await this.pauseModal.openModal();
+    this.pauseModalEl.time.innerHTML = (this.game.ms / 1000).toFixed(2);
+    this.pauseModalEl.score.innerHTML = `${this.game.score}%`;
+
+    await this.pauseModal.open();
   }
   async resumeGameHandler() {
-    await this.pauseModal.closeModal();
+    await this.pauseModal.close();
 
     this.game.resumeGame();
   }

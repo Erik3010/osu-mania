@@ -8,8 +8,8 @@ class Modal {
     this.resolveCallback = null;
   }
   init() {
-    if (this.isShowModal) this.openModal();
-    else this.closeModal();
+    if (this.isShowModal) this.open();
+    else this.close();
 
     this.listener();
   }
@@ -23,7 +23,7 @@ class Modal {
       }
     });
   }
-  closeModal() {
+  close() {
     return new Promise((resolve) => {
       this.isShowModal = false;
 
@@ -33,7 +33,7 @@ class Modal {
       this.resolveCallback = resolve;
     });
   }
-  openModal() {
+  open() {
     return new Promise((resolve) => {
       this.isShowModal = true;
 

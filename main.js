@@ -16,5 +16,9 @@ const ui = new UI({
   speedLevelRadios: [
     ...document.querySelectorAll(".speed-mode input[type=radio]"),
   ],
+  pauseModalEl: {
+    time: document.querySelector("#pause-modal-time"),
+    score: document.querySelector("#pause-modal-score"),
+  },
 });
 window.onload = async () => await ui.init();
