@@ -8,8 +8,11 @@ class Modal {
     this.resolveCallback = null;
   }
   init() {
-    if (this.isShowModal) this.open();
-    else this.close();
+    if (this.isShowModal) {
+      this.open();
+    } else {
+      this.close();
+    }
 
     this.listener();
   }
