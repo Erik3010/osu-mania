@@ -12,6 +12,7 @@ class UI {
 
     this.startModal = null;
     this.pauseModal = null;
+    this.finishModal = null;
 
     this.speedLevelRadios = speedLevelRadios;
     this.selectedLevel = this.speedLevelRadios.find((el) => el.checked)?.value;
@@ -24,6 +25,7 @@ class UI {
   async init() {
     this.initStartModal();
     this.initPauseModal();
+    this.initFinishModal();
 
     this.listener();
   }
@@ -58,6 +60,13 @@ class UI {
       initialValue: false,
     });
     this.pauseModal.init();
+  }
+  initFinishModal() {
+    this.finishModal = new Modal({
+      modal: document.querySelector("#finish-modal"),
+      initialValue: false,
+    });
+    this.finishModal.init();
   }
   speedModeChangeHandler(e) {
     if (!e.target.checked) return;
