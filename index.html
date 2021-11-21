@@ -6,7 +6,7 @@
   <link rel="icon" type="image/svg+xml" href="/osu-mania/assets/favicon.17e50649.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite App</title>
-  <script type="module" crossorigin src="/osu-mania/assets/index.ceafb2dc.js"></script>
+  <script type="module" crossorigin src="/osu-mania/assets/index.1444c1ce.js"></script>
   <link rel="stylesheet" href="/osu-mania/assets/index.308b83e7.css">
 </head>
 
@@ -78,6 +78,27 @@
       </div>
       <div class="modal-footer">
         <div class="btn btn-primary" id="resume-btn">Resume Game!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-container" id="finish-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <p>Game Finished!</p>
+      </div>
+      <div class="modal-body">
+        <div class="modal-item">
+          <p class="modal-item-label">Highscore</p>
+          <p class="modal-item-value" id="finish-modal-highscore"></p>
+        </div>
+        <div class="modal-item">
+          <p class="modal-item-label">Your Score</p>
+          <p class="modal-item-value" id="finish-modal-score"></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="btn btn-primary" id="restart-btn">Play Again!</div>
       </div>
     </div>
   </div>
