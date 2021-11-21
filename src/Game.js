@@ -16,14 +16,6 @@ class Game {
     this.timeEl = timeEl;
     this.scoreEl = scoreEl;
 
-    this.song = {};
-
-    this.tiles = [];
-    this.keys = [];
-    this.lines = [];
-    this.border = null;
-
-    this.interval = null;
     this.fps = 1000 / 30;
 
     this.laneCount = 4;
@@ -45,9 +37,6 @@ class Game {
 
     this.keysMap = ["D", "F", "J", "K"];
 
-    this.ms = 0;
-    this.start = 0;
-
     this.speedModes = {
       slow: 0.5,
       normal: 1,
@@ -57,24 +46,34 @@ class Game {
 
     this.hitTolerance = 50;
 
-    this.pause = false;
-    this.pauseStart = null;
-
     this.onFinish = null;
   }
   async init(speed) {
-    this.speed = this.speedModes[speed];
-
-    this.start = Date.now();
-
-    this.song = await Http.fetch(
-      `${assetsBaseUrl}songs/1.unforgiving/map.json`
-    );
+    await this.initGame(speed);
 
     this.initUI();
     this.initTiles();
 
     this.animate();
+  }
+  async initGame(speed) {
+    this.song = await Http.fetch(
+      `${assetsBaseUrl}songs/1.unforgiving/map.json`
+    );
+
+    this.tiles = [];
+    this.keys = [];
+    this.lines = [];
+    this.border = null;
+
+    this.ms = 0;
+    this.start = Date.now();
+    this.speed = this.speedModes[speed];
+
+    this.pause = false;
+    this.pauseStart = null;
+
+    this.interval = null;
   }
   initUI() {
     this.initPianoKeys();
@@ -100,6 +99,8 @@ class Game {
       });
       this.tiles.push(tile);
     });
+
+    console.log(this.tiles);
   }
   initLine() {
     const { width, height } = this.pianoKeysPosition;

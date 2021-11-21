@@ -57,6 +57,11 @@ class UI {
       "click",
       this.resumeGameHandler.bind(this)
     );
+
+    this.restartGameButton.addEventListener(
+      "click",
+      this.restartGameHandler.bind(this)
+    );
   }
   initStartModal() {
     this.startModal = new Modal({
@@ -105,10 +110,14 @@ class UI {
 
     this.game.resumeGame();
   }
+  async restartGameHandler() {
+    await this.finishModal.close();
+    await this.startModal.open();
+  }
   async gameOverHandler() {
     await this.finishModal.open();
 
-    if (this.game.score > (this.highScoreStorage.get() ?? 0))
+    if (+this.game.score > +(this.highScoreStorage.get() ?? 0))
       this.highScoreStorage.set(this.game.score);
 
     const highScore = this.highScoreStorage.get() ?? 0;
