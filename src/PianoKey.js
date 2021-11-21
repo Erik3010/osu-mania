@@ -19,7 +19,7 @@ class PianoKey extends Rect {
     this.key = key;
 
     this.highlight = null;
-    this.text == null;
+    this.text = null;
 
     this.onHitTile = onHitTile;
 
