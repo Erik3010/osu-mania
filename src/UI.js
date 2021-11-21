@@ -1,12 +1,16 @@
 import Modal from "./Components/Modal";
 
+import Storage from "./Utility/Storage";
+
 class UI {
   constructor({
     game,
     startGameButton,
     resumeGameButton,
+    restartGameButton,
     speedLevelRadios,
     pauseModalEl,
+    finishModalEl,
   }) {
     this.game = game;
 
@@ -19,10 +23,18 @@ class UI {
 
     this.startGameButton = startGameButton;
     this.resumeGameButton = resumeGameButton;
+    this.restartGameButton = restartGameButton;
 
     this.pauseModalEl = pauseModalEl;
+    this.finishModalEl = finishModalEl;
+
+    this.highScoreStorage = new Storage({
+      key: "OSU_MANIA:highscore",
+    });
   }
   async init() {
+    this.game.onFinish = this.gameOverHandler.bind(this);
+
     this.initStartModal();
     this.initPauseModal();
     this.initFinishModal();
@@ -92,6 +104,17 @@ class UI {
     await this.pauseModal.close();
 
     this.game.resumeGame();
+  }
+  async gameOverHandler() {
+    await this.finishModal.open();
+
+    if (this.game.score > (this.highScoreStorage.get() ?? 0))
+      this.highScoreStorage.set(this.game.score);
+
+    const highScore = this.highScoreStorage.get() ?? 0;
+
+    this.finishModalEl.score.innerHTML = `${this.game.score}%`;
+    this.finishModalEl.highScore.innerHTML = `${highScore}%`;
   }
 }
 

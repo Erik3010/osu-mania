@@ -5,7 +5,8 @@ import Tile from "./Tile";
 
 import Rect from "./Engine/Rect";
 
-import Utility from "./Utility";
+import { assetsBaseUrl } from "./env";
+import Http from "./Utility/Http";
 
 class Game {
   constructor({ canvas, timeEl, scoreEl }) {
@@ -58,13 +59,17 @@ class Game {
 
     this.pause = false;
     this.pauseStart = null;
+
+    this.onFinish = null;
   }
   async init(speed) {
     this.speed = this.speedModes[speed];
 
     this.start = Date.now();
 
-    this.song = await Utility.fetchSongMap();
+    this.song = await Http.fetch(
+      `${assetsBaseUrl}songs/1.unforgiving/map.json`
+    );
 
     this.initUI();
     this.initTiles();
@@ -193,7 +198,7 @@ class Game {
   }
   animate() {
     if (this.isFinish || this.pause) {
-      this.isFinish && alert(`Your score: ${this.score}%`);
+      this.isFinish && this.onFinish && this.onFinish();
       return;
     }
 
